@@ -20,4 +20,5 @@ python -m agent_states.graph
 
 ```sh
 python -m pytest -p no:warnings --cov-report term-missing --cov=agent_states tests
+```
 
