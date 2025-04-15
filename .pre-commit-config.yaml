@@ -24,3 +24,8 @@ repos:
     hooks:
       - id: pip-audit
         args: ["-r", "requirements.txt"]
+  - repo: https://github.com/pypa/pip-audit
+    rev: v2.8.0
+    hooks:
+      - id: pip-audit
+        args: ["-r", "requirements.txt"]
