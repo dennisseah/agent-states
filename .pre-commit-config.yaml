@@ -1,0 +1,26 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.1
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.375
+    hooks:
+      - id: pyright
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    # uv version.
+    rev: 0.6.2
+    hooks:
+      # Compile requirements
+      - id: uv-lock
+      - id: uv-export
+        args: ["--frozen", "--no-dev", "--output-file=requirements.txt"]
+      - id: uv-export
+        args: ["--frozen", "--all-groups",  "--output-file=requirements.dev.txt"]
+  - repo: https://github.com/pypa/pip-audit
+    rev: v2.8.0
+    hooks:
+      - id: pip-audit
+        args: ["-r", "requirements.txt"]

@@ -1,0 +1,53 @@
+[project]
+name = "agent-states"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "azure-core>=1.33.0",
+    "azure-identity>=1.21.0",
+    "faker>=37.1.0",
+    "lagom>=2.7.5",
+    "langchain-openai>=0.3.12",
+    "langgraph>=0.3.30",
+    "pydantic>=2.11.3",
+    "python-dotenv>=1.1.0",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0",
+    "pyright>=1.1.399",
+    "pytest>=8.3.5",
+    "pytest-asyncio>=0.26.0",
+    "pytest-cov>=6.1.1",
+    "pytest-mock>=3.14.0",
+    "ruff>=0.11.5",
+]
+
+[tool.ruff]
+exclude = ["typings", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "TID"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+exclude = ["typings", ".venv", ".vscode", ".git"]
+
+
+[tool.coverage.run]
+omit = [
+    "*/__init__.py",
+    "agent_states/hosting.py",
+    "agent_states/agents/*",
+    "agent_states/data/*",
+    "agent_states/protocols/*",
+    "agent_states/graph.py",
+    "agent_states/tools/*.py"
+]

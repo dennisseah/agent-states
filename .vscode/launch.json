@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "test",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "langgraph_supervisor/graph.py",
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "env": { "PYTHONPATH": "${workspaceRoot}" }
+    }
+  ]
+}
