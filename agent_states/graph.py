@@ -1,5 +1,7 @@
+import json
 from typing import Literal
 
+from langchain_core.messages.tool import ToolMessage
 from langchain_core.runnables import RunnableConfig
 from langchain_openai import AzureChatOpenAI
 from langgraph.graph import MessagesState, StateGraph
@@ -39,6 +41,7 @@ def create_graph(llm: AzureChatOpenAI) -> CompiledStateGraph:
 def main():
     llm = container[IAzureOpenAIService].get_model()
     graph = create_graph(llm)
+    past_messages = []
 
     def stream(user_input: str) -> None:
         stream_input = (
@@ -55,6 +58,8 @@ def main():
 
                     if vals and type(vals["messages"][-1]) is not dict:  # noqa: E721
                         vals["messages"][-1].pretty_print()
+                        if isinstance(vals["messages"][-1], ToolMessage):
+                            past_messages.append(vals["messages"][-1].content)
 
     print("Start a chat. Type 'quit' or 'exit' or 'q' to exit.\n")
     print("Can you please provide your medical condition?\n")
@@ -62,7 +67,29 @@ def main():
     user_input: str = input(prompt_msg).strip()
 
     while user_input.lower() not in ["q", "quit", "exit"]:
-        stream(user_input)
+        if past_messages:
+            json_input = json.loads(past_messages[-1])
+            state = json_input.get("state")
+            choices = json_input.get("choices")
+            label = json_input.get("label")
+
+            message = f"""
+state:
+'''json
+{json.dumps(state, indent=2)}
+'''
+
+choices:
+'''json
+{json.dumps(choices, indent=2)}
+'''
+
+{label}: {user_input}
+            """
+            stream(message)
+        else:
+            stream(user_input)
+
         user_input = input(prompt_msg).strip()
 
 
